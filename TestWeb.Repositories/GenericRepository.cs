@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TestWeb.Data.Context;
-using TestWeb.Data.Models;
 
 namespace TestWeb.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
         Task<List<T>> GetAllAsync();
-        Task<List<T>> GetAsync(Func<DbSet<T>, IQueryable<T>> func);
+
+        Task<List<T>> GetAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "");
         Task<T> GetByIdAsync(object id);
         Task<T> AddAsync(T obj);
         T Update(T obj);
@@ -21,8 +23,8 @@ namespace TestWeb.Repositories
 
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private DbSet<T> _dbSet = null;
-        private ProductContext _context;
+        private readonly DbSet<T> _dbSet;
+        private readonly ProductContext _context;
         public GenericRepository(ProductContext context)
         {
             _dbSet = context.Set<T>();
@@ -33,10 +35,20 @@ namespace TestWeb.Repositories
         {
             return _dbSet.ToListAsync();
         }
-
-        public Task<List<T>> GetAsync(Func<DbSet<T>, IQueryable<T>> func)
+        
+        public virtual Task<List<T>> GetAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
         {
-            return func(_dbSet).ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return orderBy != null ? orderBy(query).ToListAsync() : query.ToListAsync();
         }
 
         public Task<T> GetByIdAsync(object id)

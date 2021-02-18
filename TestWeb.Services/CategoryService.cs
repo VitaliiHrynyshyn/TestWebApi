@@ -59,10 +59,7 @@ namespace TestWeb.Services
 
         public async Task<Category> GetWithProducts(int id)
         {
-            var result = await _categoryRepository.GetAsync(categories =>
-                categories
-                    .Include(x => x.Products)
-                    .Where(x => x.Id == id));
+            var result = await _categoryRepository.GetAsync(x => x.Id == id, null, "Products");
 
             return _mapper.Map<CategoryEntity, Category>(result.FirstOrDefault());
         }
