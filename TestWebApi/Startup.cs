@@ -9,7 +9,9 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using TestWeb.Data.Context;
 using TestWeb.Repositories;
+using TestWeb.Repositories.Interfaces;
 using TestWeb.Services;
+using TestWeb.Services.Interfaces;
 
 namespace TestWebApi
 {

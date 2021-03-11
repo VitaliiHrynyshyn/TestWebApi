@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using TestWeb.Data.Models;
+using TestWeb.Models;
 using TestWeb.Services.Models;
+using Category = TestWeb.Models.Category;
+using Product = TestWeb.Models.Product;
 
 namespace TestWeb.Services
 {
@@ -9,9 +11,8 @@ namespace TestWeb.Services
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<ProductEntity, Product>().ReverseMap();
-            CreateMap<CategoryEntity, Category>().ReverseMap();
-
+            CreateMap<Product, Models.Product>().ReverseMap();
+            CreateMap<Category, Models.Category>().ReverseMap();
         }
     }
 }

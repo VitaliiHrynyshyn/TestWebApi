@@ -2,67 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using TestWeb.Data.Models;
-using TestWeb.Repositories;
-using TestWeb.Services.Models;
+using TestWeb.Repositories.Interfaces;
+using TestWeb.Services.Interfaces;
+using ProductDal = TestWeb.Models.Product;
+using ProductDto = TestWeb.Services.Models.Product;
 
 namespace TestWeb.Services
 {
-    public interface IProductService
-    {
-        Task<List<Product>> GetAllAsync();
-        Task<Product> AddAsync(Product product);
-        Task<Product> UpdateAsync(Product product);
-        Task<Product> RemoveAsync(int id);
-
-        Task<Product> GetWithCategories(int id);
-    }
-
     public class ProductService : IProductService
     {
-        private readonly IGenericRepository<ProductEntity> _productRepository;
+        private readonly IGenericRepository<ProductDal> _productRepository;
         private readonly IMapper _mapper;
 
-        public ProductService(IGenericRepository<ProductEntity> productRepository, IMapper mapper)
+        public ProductService(IGenericRepository<ProductDal> productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<List<ProductDto>> GetAllAsync()
         {
             var products = await _productRepository.GetAllAsync();
-            var result = _mapper.Map<List<ProductEntity>, List<Product>> (products);
+            var result = _mapper.Map<List<ProductDal>, List<ProductDto>> (products);
             return result;
         }
 
-        public async Task<Product> AddAsync(Product product)
+        public async Task<ProductDto> AddAsync(ProductDto product)
         {
-            var result = await _productRepository.AddAsync(_mapper.Map<Product, ProductEntity>(product));
+            var result = await _productRepository.AddAsync(_mapper.Map<ProductDto, ProductDal>(product));
             await _productRepository.SaveAsync();
-            return _mapper.Map<ProductEntity, Product>(result);
+            return _mapper.Map<ProductDal, ProductDto>(result);
         }
 
-        public async Task<Product> UpdateAsync(Product product)
+        public async Task<ProductDto> UpdateAsync(ProductDto product)
         {
-            var result = _productRepository.Update(_mapper.Map<Product, ProductEntity>(product));
+            var existing = await _productRepository.GetByIdAsync(product.Id);
+
+            var result = _productRepository.Update(_mapper.Map(product, existing));
+
             await _productRepository.SaveAsync();
-            return _mapper.Map<ProductEntity, Product>(result);
+            return _mapper.Map<ProductDal, ProductDto>(result);
         }
 
-        public async Task<Product> RemoveAsync(int id)
+        public async Task<ProductDto> RemoveAsync(int id)
         {
             var result = await _productRepository.RemoveAsync(id);
             await _productRepository.SaveAsync();
-            return _mapper.Map<ProductEntity, Product>(result);
+            return _mapper.Map<ProductDal, ProductDto>(result);
         }
 
-        public async Task<Product> GetWithCategories(int id)
+        public async Task<ProductDto> GetWithCategories(int id)
         {
             var result = await _productRepository.GetAsync(x => x.Id == id, null, "Category");
 
-            return _mapper.Map<ProductEntity, Product>(result.FirstOrDefault());
+            return _mapper.Map<ProductDal, ProductDto>(result.FirstOrDefault());
         }
     }
 }

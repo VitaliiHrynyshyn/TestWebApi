@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TestWeb.Services;
+using TestWeb.Services.Interfaces;
 using TestWeb.Services.Models;
 
 namespace TestWebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class ProductController : Controller
+    [Route("api/[controller]")]
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
 
@@ -18,34 +19,43 @@ namespace TestWebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Product>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return await _productService.GetAllAsync();
+            var result = await _productService.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<Product> Add(Product product)
+        public async Task<IActionResult> Add(Product product)
         {
-            return await _productService.AddAsync(product);
+            var result = await _productService.AddAsync(product);
+            return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<Product> Update(Product product)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, Product product)
         {
-            return await _productService.UpdateAsync(product);
+            product.Id = id;
+
+            var result = await _productService.UpdateAsync(product);
+
+            return result == null ? NotFound() : Ok(result);
         }
 
-
-        [HttpDelete]
-        public async Task<Product> Remove(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            return await _productService.RemoveAsync(id);
+            var result = await _productService.RemoveAsync(id);
+
+            return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpGet]
-        public async Task<Product> GetWithCategories(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetWithProducts(int id)
         {
-            return await _productService.GetWithCategories(id);
+            var result = await _productService.GetWithCategories(id);
+
+            return result == null ? NotFound() : Ok(result);
         }
     }
 }

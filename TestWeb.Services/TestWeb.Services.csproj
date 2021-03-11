@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Models.csproj" />
     <ProjectReference Include="..\TestWeb.Repositories\TestWeb.Repositories.csproj" />
   </ItemGroup>
 
