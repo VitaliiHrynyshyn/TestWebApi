@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TestWeb.Services;
+using AutoMapper;
+using TestWeb.Models;
 using TestWeb.Services.Interfaces;
-using TestWeb.Services.Models;
+using TestWebApi.Model;
+
 
 namespace TestWebApi.Controllers
 {
@@ -12,9 +14,12 @@ namespace TestWebApi.Controllers
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        private readonly IMapper _mapper;
+
+        public CategoryController(ICategoryService categoryService, IMapper mapper)
         {
             _categoryService = categoryService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -25,18 +30,18 @@ namespace TestWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Category category)
+        public async Task<IActionResult> Add(CategoryViewModel category)
         {
-            var result = await _categoryService.AddAsync(category);
+            var result = await _categoryService.AddAsync(_mapper.Map<CategoryViewModel, Category>(category));
             return Ok(result);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, Category category)
+        public async Task<IActionResult> Update(int id, CategoryViewModel category)
         {
             category.Id = id;
 
-            var result = await _categoryService.UpdateAsync(category);
+            var result = await _categoryService.UpdateAsync(_mapper.Map<CategoryViewModel, Category>(category));
 
             return result == null ? NotFound() : Ok(result);
         }

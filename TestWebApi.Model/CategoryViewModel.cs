@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TestWeb.Services.Models
+namespace TestWebApi.Model
 {
-    public class Category
+    public class CategoryViewModel
     {
         public int Id { get; set; }
 
@@ -13,6 +13,6 @@ namespace TestWeb.Services.Models
         [Required]
         public string Description { get; set; }
 
-        public ICollection<Product> Products { get; set; }
+        public ICollection<ProductViewModel> Products { get; set; }
     }
 }

@@ -16,6 +16,11 @@ namespace TestWeb.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             DataSeeder.Seed(modelBuilder);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(s => s.Category)
+                .WithMany(g => g.Products)
+                .HasForeignKey(s => s.CategoryId);
         }
     }
 }

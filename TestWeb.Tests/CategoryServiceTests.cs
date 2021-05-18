@@ -17,16 +17,12 @@ namespace TestWeb.Tests
         public async Task GetAllAsync()
         {
             // Arrange
-            var categoryEntities = new List<Category> { new Category { Description = "Description", Name = "Name" } };
-            var categories = new List<Services.Models.Category> { new Services.Models.Category { Description = "Description1", Name = "Name1" } };
+            var categories = new List<Category> { new Category { Description = "Description", Name = "Name" } };
 
-            var repositoryMock = new Mock<IGenericRepository<Category>>();
-            repositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(categoryEntities);
+            var repositoryMock = new Mock<ICategoryRepository>();
+            repositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(categories);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<List<Category>, List<Services.Models.Category>>(It.IsAny<List<Category>>())).Returns(categories);
-
-            var service = new CategoryService(repositoryMock.Object, mapperMock.Object);
+            var service = new CategoryService(repositoryMock.Object);
 
             // Act
             var result = await service.GetAllAsync();
@@ -40,16 +36,12 @@ namespace TestWeb.Tests
         public async Task AddAsync()
         {
             // Arrange
-            var categoryEntity = new Category { Description = "Description", Name = "Name" };
-            var category = new Services.Models.Category { Description = "Description1", Name = "Name1" };
+            var category = new Category { Description = "Description1", Name = "Name1" };
 
-            var repositoryMock = new Mock<IGenericRepository<Category>>();
-            repositoryMock.Setup(x => x.AddAsync(categoryEntity)).ReturnsAsync(categoryEntity);
+            var repositoryMock = new Mock<ICategoryRepository>();
+            repositoryMock.Setup(x => x.AddAsync(category)).ReturnsAsync(category);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<Category, Services.Models.Category>(It.IsAny<Category>())).Returns(category);
-
-            var service = new CategoryService(repositoryMock.Object, mapperMock.Object);
+            var service = new CategoryService(repositoryMock.Object);
 
             // Act
             var result = await service.AddAsync(category);
@@ -63,16 +55,12 @@ namespace TestWeb.Tests
         public async Task UpdateAsync()
         {
             // Arrange
-            var categoryEntity = new Category { Description = "Description", Name = "Name" };
-            var category = new Services.Models.Category { Description = "Description1", Name = "Name1" };
+            var category = new Category { Description = "Description1", Name = "Name1" };
            
-            var repositoryMock = new Mock<IGenericRepository<Category>>();
-            repositoryMock.Setup(x => x.Update(categoryEntity)).Returns(categoryEntity);
+            var repositoryMock = new Mock<ICategoryRepository>();
+            repositoryMock.Setup(x => x.Update(category)).Returns(category);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<Category, Services.Models.Category>(It.IsAny<Category>())).Returns(category);
-
-            var service = new CategoryService(repositoryMock.Object, mapperMock.Object);
+            var service = new CategoryService(repositoryMock.Object);
 
             // Act
             var result = await service.UpdateAsync(category);
@@ -86,17 +74,13 @@ namespace TestWeb.Tests
         public async Task RemoveAsync()
         {
             // Arrange
-            var categoryEntity = new Category { Description = "Description", Name = "Name" };
-            var category = new Services.Models.Category { Description = "Description1", Name = "Name1" };
+            var category = new Category { Description = "Description1", Name = "Name1" };
             var id = 1;
 
-            var repositoryMock = new Mock<IGenericRepository<Category>>();
-            repositoryMock.Setup(x => x.RemoveAsync(id)).ReturnsAsync(categoryEntity);
+            var repositoryMock = new Mock<ICategoryRepository>();
+            repositoryMock.Setup(x => x.RemoveAsync(id)).ReturnsAsync(category);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<Category, Services.Models.Category>(It.IsAny<Category>())).Returns(category);
-
-            var service = new CategoryService(repositoryMock.Object, mapperMock.Object);
+            var service = new CategoryService(repositoryMock.Object);
 
             // Act
             var result = await service.RemoveAsync(id);
@@ -111,23 +95,19 @@ namespace TestWeb.Tests
         {
             // Arrange
             var categoryEntities = new List<Category> { new Category { Description = "Description", Name = "Name" } };
-            var categories = new Services.Models.Category { Description = "Description1", Name = "Name1" };
             var id = 1;
 
-            var repositoryMock = new Mock<IGenericRepository<Category>>();
-            repositoryMock.Setup(x => x.GetAsync(p => p.Id == id, null, "Products")).ReturnsAsync(categoryEntities);
+            var repositoryMock = new Mock<ICategoryRepository>();
+            repositoryMock.Setup(x => x.GetWithProductsAsync()).ReturnsAsync(categoryEntities);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<Category, Services.Models.Category>(It.IsAny<Category>())).Returns(categories);
-
-            var service = new CategoryService(repositoryMock.Object, mapperMock.Object);
+            var service = new CategoryService(repositoryMock.Object);
 
             // Act
             var result = await service.GetWithProducts(id);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Description, categories.Description);
+            Assert.AreEqual(result.Description, categoryEntities.First().Description);
         }
     }
 }

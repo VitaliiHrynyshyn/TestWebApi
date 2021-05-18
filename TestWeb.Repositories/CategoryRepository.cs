@@ -1,49 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TestWeb.Data.Context;
+using TestWeb.Models;
 using TestWeb.Repositories.Interfaces;
 
 namespace TestWeb.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class CategoryRepository : ICategoryRepository
     {
-        private readonly DbSet<T> _dbSet;
+        private readonly DbSet<Category> _dbSet;
         private readonly ProductContext _context;
-        public GenericRepository(ProductContext context)
+        public CategoryRepository(ProductContext context)
         {
-            _dbSet = context.Set<T>();
+            _dbSet = context.Set<Category>();
             _context = context;
         }
 
-        public Task<List<T>> GetAllAsync()
+        public Task<List<Category>> GetAllAsync()
         {
             return _dbSet.ToListAsync();
         }
         
-        public virtual Task<List<T>> GetAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
+        public virtual Task<List<Category>> GetWithProductsAsync()
         {
-            IQueryable<T> query = _dbSet;
-
-            if (filter != null)
-                query = query.Where(filter);
-
-            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            return orderBy != null ? orderBy(query).ToListAsync() : query.ToListAsync();
+            return _dbSet.Include(x=> x.Products).ToListAsync();
         }
 
-        public Task<T> GetByIdAsync(object id)
+        public Task<Category> GetByIdAsync(object id)
         {
             return _dbSet.FindAsync(id).AsTask();
         }
-        public async Task<T> AddAsync(T obj)
+        public async Task<Category> AddAsync(Category obj)
         {
             if (obj == null)
                 return null;
@@ -51,14 +39,14 @@ namespace TestWeb.Repositories
             var entity = await _dbSet.AddAsync(obj);
             return entity.Entity;
         }
-        public T Update(T obj)
+        public Category Update(Category obj)
         {
             if (obj == null)
                 return null;
 
             return _dbSet.Update(obj).Entity;
         }
-        public async Task<T> RemoveAsync(int id)
+        public async Task<Category> RemoveAsync(int id)
         {
             var obj = await _dbSet.FindAsync(id);
 

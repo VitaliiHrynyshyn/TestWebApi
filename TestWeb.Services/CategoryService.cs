@@ -1,58 +1,52 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestWeb.Models;
 using TestWeb.Repositories.Interfaces;
 using TestWeb.Services.Interfaces;
-using CategoryDal = TestWeb.Models.Category;
-using CategoryDto = TestWeb.Services.Models.Category;
 
 namespace TestWeb.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IGenericRepository<CategoryDal> _categoryRepository;
-        private readonly IMapper _mapper;
-
-        public CategoryService(IGenericRepository<CategoryDal> categoryRepository, IMapper mapper)
+        private readonly ICategoryRepository _categoryRepository;
+        
+        public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _mapper = mapper;
         }
 
-        public async Task<List<CategoryDto>> GetAllAsync()
+        public async Task<List<Category>> GetAllAsync()
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            var result = _mapper.Map<List<CategoryDal>, List<CategoryDto>>(categories);
+            return await _categoryRepository.GetAllAsync();
+            
+        }
+
+        public async Task<Category> AddAsync(Category product)
+        {
+            var result = await _categoryRepository.AddAsync(product);
+            await _categoryRepository.SaveAsync();
             return result;
         }
 
-        public async Task<CategoryDto> AddAsync(CategoryDto product)
+        public async Task<Category> UpdateAsync(Category product)
         {
-            var result = await _categoryRepository.AddAsync(_mapper.Map<CategoryDto, CategoryDal>(product));
+            var result = _categoryRepository.Update(product);
             await _categoryRepository.SaveAsync();
-            return _mapper.Map<CategoryDal, CategoryDto>(result);
+            return result;
         }
 
-        public async Task<CategoryDto> UpdateAsync(CategoryDto product)
-        {
-            var result = _categoryRepository.Update(_mapper.Map<CategoryDto, CategoryDal>(product));
-            await _categoryRepository.SaveAsync();
-            return _mapper.Map<CategoryDal, CategoryDto>(result);
-        }
-
-        public async Task<CategoryDto> RemoveAsync(int id)
+        public async Task<Category> RemoveAsync(int id)
         {
             var result = await _categoryRepository.RemoveAsync(id);
             await _categoryRepository.SaveAsync();
-            return _mapper.Map<CategoryDal, CategoryDto>(result);
+            return result;
         }
 
-        public async Task<CategoryDto> GetWithProducts(int id)
+        public async Task<Category> GetWithProducts(int id)
         {
-            var result = await _categoryRepository.GetAsync(x => x.Id == id, null, "Products");
-
-            return _mapper.Map<CategoryDal, CategoryDto>(result.FirstOrDefault());
+            var result = await _categoryRepository.GetWithProductsAsync();
+            return result.FirstOrDefault();
         }
     }
 }

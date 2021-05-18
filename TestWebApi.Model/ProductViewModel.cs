@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TestWeb.Services.Models
+namespace TestWebApi.Model
 {
-    public class Product
+    public class ProductViewModel
     {
         public int Id { get; set; }
 
@@ -15,6 +15,6 @@ namespace TestWeb.Services.Models
         public decimal Price { get; set; }
 
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public CategoryViewModel CategoryViewModel { get; set; }
     }
 }

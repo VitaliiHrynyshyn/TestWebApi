@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TestWeb.Services.Models;
+using TestWeb.Models;
 
 namespace TestWeb.Services.Interfaces
 {

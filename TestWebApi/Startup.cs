@@ -12,6 +12,7 @@ using TestWeb.Repositories;
 using TestWeb.Repositories.Interfaces;
 using TestWeb.Services;
 using TestWeb.Services.Interfaces;
+using TestWebApi.Model;
 
 namespace TestWebApi
 {
@@ -30,7 +31,8 @@ namespace TestWebApi
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ProductContext>(options => options.UseSqlServer(connection));
 
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();

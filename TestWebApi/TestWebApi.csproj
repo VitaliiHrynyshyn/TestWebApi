@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Models.csproj" />
     <ProjectReference Include="..\TestWeb.Services\TestWeb.Services.csproj" />
+    <ProjectReference Include="..\TestWebApi.Model\TestWebApi.Model.csproj" />
   </ItemGroup>
 
 </Project>
