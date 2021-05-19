@@ -1,15 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using TestWeb.Data.Models;
-using TestWeb.Repositories;
-using TestWeb.Services;
-using TestWeb.Services.Models;
+using TestWeb.Application.Services;
+using TestWeb.Persistence.Base;
+using Product = TestWeb.Models.Product;
 
 namespace TestWeb.Tests
 {
@@ -20,16 +16,12 @@ namespace TestWeb.Tests
         public async Task GetAllAsync()
         {
             // Arrange
-            var productEntities = new List<ProductEntity> { new ProductEntity { Description = "Description", Name = "Name" } };
             var products = new List<Product> { new Product { Description = "Description1", Name = "Name1" } };
 
-            var repositoryMock = new Mock<IGenericRepository<ProductEntity>>();
-            repositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(productEntities);
+            var repositoryMock = new Mock<IProductRepository>();
+            repositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(products);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<List<ProductEntity>, List<Product>>(It.IsAny<List<ProductEntity>>())).Returns(products);
-
-            var service = new ProductService(repositoryMock.Object, mapperMock.Object);
+            var service = new ProductService(repositoryMock.Object);
 
             // Act
             var result = await service.GetAllAsync();
@@ -43,16 +35,12 @@ namespace TestWeb.Tests
         public async Task AddAsync()
         {
             // Arrange
-            var productEntity = new ProductEntity() { Description = "Description", Name = "Name" };
             var product = new Product() { Description = "Description1", Name = "Name1" };
 
-            var repositoryMock = new Mock<IGenericRepository<ProductEntity>>();
-            repositoryMock.Setup(x => x.AddAsync(productEntity)).ReturnsAsync(productEntity);
+            var repositoryMock = new Mock<IProductRepository>();
+            repositoryMock.Setup(x => x.AddAsync(product)).ReturnsAsync(product);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<ProductEntity, Product>(It.IsAny<ProductEntity>())).Returns(product);
-
-            var service = new ProductService(repositoryMock.Object, mapperMock.Object);
+            var service = new ProductService(repositoryMock.Object);
 
             // Act
             var result = await service.AddAsync(product);
@@ -66,16 +54,12 @@ namespace TestWeb.Tests
         public async Task UpdateAsync()
         {
             // Arrange
-            var productEntity = new ProductEntity() { Description = "Description", Name = "Name" };
-            var product = new Product() { Description = "Description1", Name = "Name1" };
+            var product = new Product { Description = "Description1", Name = "Name1" };
 
-            var repositoryMock = new Mock<IGenericRepository<ProductEntity>>();
-            repositoryMock.Setup(x => x.Update(productEntity)).Returns(productEntity);
+            var repositoryMock = new Mock<IProductRepository>();
+            repositoryMock.Setup(x => x.Update(product)).Returns(product);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<ProductEntity, Product>(It.IsAny<ProductEntity>())).Returns(product);
-
-            var service = new ProductService(repositoryMock.Object, mapperMock.Object);
+            var service = new ProductService(repositoryMock.Object);
 
             // Act
             var result = await service.UpdateAsync(product);
@@ -89,17 +73,13 @@ namespace TestWeb.Tests
         public async Task RemoveAsync()
         {
             // Arrange
-            var productEntity = new ProductEntity() { Description = "Description", Name = "Name" };
             var product = new Product() { Description = "Description1", Name = "Name1" };
             var id = 1;
 
-            var repositoryMock = new Mock<IGenericRepository<ProductEntity>>();
-            repositoryMock.Setup(x => x.RemoveAsync(id)).ReturnsAsync(productEntity);
+            var repositoryMock = new Mock<IProductRepository>();
+            repositoryMock.Setup(x => x.RemoveAsync(id)).ReturnsAsync(product);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<ProductEntity, Product>(It.IsAny<ProductEntity>())).Returns(product);
-
-            var service = new ProductService(repositoryMock.Object, mapperMock.Object);
+            var service = new ProductService(repositoryMock.Object);
 
             // Act
             var result = await service.RemoveAsync(id);
@@ -113,24 +93,20 @@ namespace TestWeb.Tests
         public async Task GetWithCategories()
         {
             // Arrange
-            var productEntities = new List<ProductEntity> { new ProductEntity() { Description = "Description", Name = "Name" } };
-            var product = new Product() { Description = "Description1", Name = "Name1" };
+            var product = new List<Product> { new Product() { Description = "Description", Name = "Name" } };
             var id = 1;
 
-            var repositoryMock = new Mock<IGenericRepository<ProductEntity>>();
-            repositoryMock.Setup(x => x.GetAsync(p => p.Id == id, null, "Category")).ReturnsAsync(productEntities);
+            var repositoryMock = new Mock<IProductRepository>();
+            repositoryMock.Setup(x => x.GetWithCategoryAsync()).ReturnsAsync(product);
 
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(m => m.Map<ProductEntity, Product>(It.IsAny<ProductEntity>())).Returns(product);
-
-            var service = new ProductService(repositoryMock.Object, mapperMock.Object);
+            var service = new ProductService(repositoryMock.Object);
 
             // Act
             var result = await service.GetWithCategories(id);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Description, product.Description);
+            Assert.AreEqual(result.Description, product.First().Description);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TestWeb.Services.Models
+namespace TestWeb.Models
 {
     public class Category
     {

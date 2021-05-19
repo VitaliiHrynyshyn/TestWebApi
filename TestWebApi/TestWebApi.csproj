@@ -8,6 +8,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -18,7 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestWeb.Services\TestWeb.Services.csproj" />
+    <ProjectReference Include="..\Test.Infrastructure.Mapper\Test.Infrastructure.Mapper.csproj" />
+    <ProjectReference Include="..\TestWeb.Data\TestWeb.Persistence.csproj" />
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Domain.Model.csproj" />
+    <ProjectReference Include="..\TestWeb.Services\TestWeb.Application.Services.csproj" />
+    <ProjectReference Include="..\TestWebApi.Model\TestWebApi.Model.csproj" />
   </ItemGroup>
 
 </Project>

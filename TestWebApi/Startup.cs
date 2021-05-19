@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,10 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using TestWeb.Data.Context;
-using TestWeb.Repositories;
-using TestWeb.Services;
+using Test.Infrastructure.Mapper;
+using TestWeb.Application.Services;
+using TestWeb.Application.Services.Base;
+using TestWeb.Persistence.Base;
+using TestWeb.Persistence.Context;
+using TestWeb.Persistence.Repository;
 
 namespace TestWebApi
 {
@@ -28,7 +29,8 @@ namespace TestWebApi
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ProductContext>(options => options.UseSqlServer(connection));
 
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();

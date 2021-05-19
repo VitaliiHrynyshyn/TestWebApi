@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TestWeb.Data.Context;
+using TestWeb.Persistence.Context;
 
 namespace TestWeb.Data.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20210217142134_InitialMigration")]
+    [Migration("20210304183438_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace TestWeb.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TestWeb.Data.Models.Category", b =>
+            modelBuilder.Entity("TestWeb.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace TestWeb.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("TestWeb.Data.Models.Product", b =>
+            modelBuilder.Entity("TestWeb.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,8 +54,8 @@ namespace TestWeb.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -64,9 +64,9 @@ namespace TestWeb.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("TestWeb.Data.Models.Product", b =>
+            modelBuilder.Entity("TestWeb.Models.Product", b =>
                 {
-                    b.HasOne("TestWeb.Data.Models.Category", "Category")
+                    b.HasOne("TestWeb.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -75,7 +75,7 @@ namespace TestWeb.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("TestWeb.Data.Models.Category", b =>
+            modelBuilder.Entity("TestWeb.Models.Category", b =>
                 {
                     b.Navigation("Products");
                 });

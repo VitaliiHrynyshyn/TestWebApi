@@ -1,50 +1,65 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TestWeb.Services;
-using TestWeb.Services.Models;
+using System.Threading.Tasks;
+using TestWeb.Application.Services.Base;
+using TestWeb.Models;
+using TestWebApi.Model;
+
 
 namespace TestWebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class CategoryController : Controller
+    [Route("api/[controller]")]
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        private readonly IMapper _mapper;
+
+        public CategoryController(ICategoryService categoryService, IMapper mapper)
         {
             _categoryService = categoryService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<Category>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return await _categoryService.GetAllAsync();
+            var result = await _categoryService.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<Category> Add(Category category)
+        public async Task<IActionResult> Add(CategoryViewModel category)
         {
-            return await _categoryService.AddAsync(category);
+            var result = await _categoryService.AddAsync(_mapper.Map<CategoryViewModel, Category>(category));
+            return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<Category> Update(Category category)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, CategoryViewModel category)
         {
-            return await _categoryService.UpdateAsync(category);
+            category.Id = id;
+
+            var result = await _categoryService.UpdateAsync(_mapper.Map<CategoryViewModel, Category>(category));
+
+            return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpDelete]
-        public async Task<Category> Remove(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            return await _categoryService.RemoveAsync(id);
+            var result = await _categoryService.RemoveAsync(id);
+
+            return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpGet]
-        public async Task<Category> GetWithProducts(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetWithProducts(int id)
         {
-            return await _categoryService.GetWithProducts(id);
+            var result = await _categoryService.GetWithProducts(id);
+
+            return result == null ? NotFound() : Ok(result);
         }
     }
 }
