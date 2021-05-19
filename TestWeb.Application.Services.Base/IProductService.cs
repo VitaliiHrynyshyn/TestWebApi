@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TestWeb.Models;
 
-namespace TestWeb.Services.Interfaces
+namespace TestWeb.Application.Services.Base
 {
     public interface IProductService
     {

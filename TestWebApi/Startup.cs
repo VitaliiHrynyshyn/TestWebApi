@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,13 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using TestWeb.Data.Context;
-using TestWeb.Repositories;
-using TestWeb.Repositories.Interfaces;
-using TestWeb.Services;
-using TestWeb.Services.Interfaces;
-using TestWebApi.Model;
+using Test.Infrastructure.Mapper;
+using TestWeb.Application.Services;
+using TestWeb.Application.Services.Base;
+using TestWeb.Persistence.Base;
+using TestWeb.Persistence.Context;
+using TestWeb.Persistence.Repository;
 
 namespace TestWebApi
 {

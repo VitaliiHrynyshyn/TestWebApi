@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using TestWeb.Models;
+using TestWebApi.Model;
 
-namespace TestWebApi.Model
+namespace Test.Infrastructure.Mapper
 {
     public class MappingProfile : Profile
     {

@@ -19,8 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestWeb.Models\TestWeb.Models.csproj" />
-    <ProjectReference Include="..\TestWeb.Services\TestWeb.Services.csproj" />
+    <ProjectReference Include="..\Test.Infrastructure.Mapper\Test.Infrastructure.Mapper.csproj" />
+    <ProjectReference Include="..\TestWeb.Data\TestWeb.Persistence.csproj" />
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Domain.Model.csproj" />
+    <ProjectReference Include="..\TestWeb.Services\TestWeb.Application.Services.csproj" />
     <ProjectReference Include="..\TestWebApi.Model\TestWebApi.Model.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestWeb.Models\TestWeb.Models.csproj" />
-    <ProjectReference Include="..\TestWeb.Repositories\TestWeb.Repositories.csproj" />
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Domain.Model.csproj" />
+    <ProjectReference Include="..\TestWebApi.Model\TestWebApi.Model.csproj" />
   </ItemGroup>
 
 </Project>

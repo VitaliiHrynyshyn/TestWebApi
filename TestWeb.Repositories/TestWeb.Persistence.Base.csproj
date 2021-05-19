@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestWeb.Data\TestWeb.Data.csproj" />
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Domain.Model.csproj" />
   </ItemGroup>
 
 </Project>

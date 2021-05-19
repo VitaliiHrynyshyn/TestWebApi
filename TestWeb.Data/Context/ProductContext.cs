@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestWeb.Models;
 
-namespace TestWeb.Data.Context
+namespace TestWeb.Persistence.Context
 {
     public class ProductContext : DbContext
     {

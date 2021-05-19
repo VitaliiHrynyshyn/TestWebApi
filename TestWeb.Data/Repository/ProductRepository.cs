@@ -1,37 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TestWeb.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using TestWeb.Models;
-using TestWeb.Repositories.Interfaces;
+using TestWeb.Persistence.Base;
+using TestWeb.Persistence.Context;
 
-namespace TestWeb.Repositories
+namespace TestWeb.Persistence.Repository
 {
-    public class CategoryRepository : ICategoryRepository
+    public class ProductRepository : IProductRepository
     {
-        private readonly DbSet<Category> _dbSet;
+        private readonly DbSet<Product> _dbSet;
         private readonly ProductContext _context;
-        public CategoryRepository(ProductContext context)
+        public ProductRepository(ProductContext context)
         {
-            _dbSet = context.Set<Category>();
+            _dbSet = context.Set<Product>();
             _context = context;
         }
 
-        public Task<List<Category>> GetAllAsync()
+        public Task<List<Product>> GetAllAsync()
         {
             return _dbSet.ToListAsync();
         }
-        
-        public virtual Task<List<Category>> GetWithProductsAsync()
+
+        public Task<List<Product>> GetWithCategoryAsync()
         {
-            return _dbSet.Include(x=> x.Products).ToListAsync();
+
+            return _dbSet.Include(x => x.Category)
+                .ToListAsync();
         }
 
-        public Task<Category> GetByIdAsync(object id)
+        public Task<Product> GetByIdAsync(int id)
         {
             return _dbSet.FindAsync(id).AsTask();
         }
-        public async Task<Category> AddAsync(Category obj)
+        public async Task<Product> AddAsync(Product obj)
         {
             if (obj == null)
                 return null;
@@ -39,14 +41,14 @@ namespace TestWeb.Repositories
             var entity = await _dbSet.AddAsync(obj);
             return entity.Entity;
         }
-        public Category Update(Category obj)
+        public Product Update(Product obj)
         {
             if (obj == null)
                 return null;
 
             return _dbSet.Update(obj).Entity;
         }
-        public async Task<Category> RemoveAsync(int id)
+        public async Task<Product> RemoveAsync(int id)
         {
             var obj = await _dbSet.FindAsync(id);
 

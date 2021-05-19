@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestWeb.Application.Services.Base;
 using TestWeb.Models;
-using TestWeb.Repositories.Interfaces;
-using TestWeb.Services.Interfaces;
+using TestWeb.Persistence.Base;
 
-namespace TestWeb.Services
+namespace TestWeb.Application.Services
 {
     public class CategoryService : ICategoryService
     {

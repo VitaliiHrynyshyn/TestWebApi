@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using AutoMapper;
+using TestWeb.Application.Services.Base;
 using TestWeb.Models;
-using TestWeb.Services.Interfaces;
 using TestWebApi.Model;
 
 

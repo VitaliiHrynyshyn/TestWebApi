@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestWeb.Application.Services.Base\TestWeb.Application.Services.Base.csproj" />
+    <ProjectReference Include="..\TestWeb.Models\TestWeb.Domain.Model.csproj" />
+    <ProjectReference Include="..\TestWeb.Repositories\TestWeb.Persistence.Base.csproj" />
+  </ItemGroup>
+
+</Project>

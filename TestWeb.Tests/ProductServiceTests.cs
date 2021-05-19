@@ -3,8 +3,8 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestWeb.Repositories.Interfaces;
-using TestWeb.Services;
+using TestWeb.Application.Services;
+using TestWeb.Persistence.Base;
 using Product = TestWeb.Models.Product;
 
 namespace TestWeb.Tests
